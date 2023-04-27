@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Sudoku Solver</title>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+			integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+			crossorigin="anonymous"
+		/>
+		<style>
+			h1 {
+				text-decoration: underline;
+			}
+
+			table {
+				border-collapse: collapse;
+			}
+
+			td {
+				border: 1px solid black;
+				width: 30px;
+				height: 30px;
+				text-align: center;
+			}
+
+			/* Add black border to every third cell in a row */
+			td:nth-child(3n) {
+				border-right: 3px solid black;
+			}
+
+			/* Add black border to every first cell in a column */
+			td:first-child {
+				border-left: 3px solid black;
+			}
+
+			/* Add black border to every third row */
+			tr:nth-child(3n) td {
+				border-bottom: 3px solid black;
+			}
+
+			/* Add top border to first row */
+			tr:first-child td {
+				border-top: 3px solid black;
+			}
+
+			caption {
+				font-size: 20px;
+				text-align: center;
+			}
+
+			.dark {
+				border: 3px solid black;
+			}
+
+			.row {
+				margin: 0 auto;
+				padding-top: 20px;
+			}
+
+			.input-table {
+				float: left;
+				margin: 0 auto;
+			}
+
+			.output-table {
+				float: left;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container text-center">
+			<h1>Sudoku Solver using Backtracking Search</h1>
+			<h3>Submission by: Aakash Manjrekar</h3>
+			<hr />
+			<form action="/" method="post">
+				<label for="puzzle">Input Puzzle:</label>
+				<input
+					type="text"
+					name="puzzle"
+					id="puzzle"
+					placeholder="81-digit string - 0 for blanks"
+					maxlength="90"
+				/>
+				<!-- <input type="submit" value="Solve Puzzle" /> -->
+				<button type="submit" class="btn btn-primary">Solve Puzzle</button>
+			</form>
+
+			<hr />
+			<div class="example-puzzles">
+				<h5>Sample Input Puzzles</h5>
+				<p>
+					Puzzle 1 👉🏽
+					700400086051080400040307090309006100000020000004900708080102060006050910210003005
+				</p>
+				<p>
+					Puzzle 2 👉🏽
+					100203800082060100700001640300095020070000010090310006053600001007020390004109005
+				</p>
+				<p>
+					Puzzle 3 👉🏽
+					100840050500900803700060100010502030075000260030609040007050006401006007060094002
+				</p>
+				<p>
+					Puzzle 4 👉🏽
+					000090075001200000070000180300600900100050004006002003032000400000065000790001000
+				</p>
+				<p>
+					Puzzle 5 👉🏽
+					000006080300002700705100600009400000080090200000008300004007805002800006050900000
+				</p>
+			</div>
+
+			<hr />
+
+			<div class="row" style="text-align: center">
+				<div class="input-table col-md-4">
+					<table>
+						<caption>
+							Input Puzzle
+						</caption>
+						{% for row in input_grid %}
+						<tr>
+							{% for cell in row %}
+							<td>{{ cell }}</td>
+							{% endfor %}
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+
+				<div class="output-table col-md-4">
+					<table>
+						<caption>
+							Output Puzzle
+						</caption>
+						{% for row in output_grid %}
+						<tr>
+							{% for cell in row %}
+							<td>{{ cell }}</td>
+							{% endfor %}
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+
+			<hr />
+
+			<div class="order_of_assignments">
+				<h3>Order of Assignment</h3>
+				<p>{{order_of_assignment}}</p>
+			</div>
+
+			<hr />
+
+			<div class="domains">
+				<h3>Domains</h3>
+				<p>{{domains}}</p>
+			</div>
+		</div>
+	</body>
+</html>
