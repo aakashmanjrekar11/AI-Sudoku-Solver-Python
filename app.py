@@ -30,7 +30,7 @@ def grid_to_string(grid):
 @app.route('/', methods=['GET', 'POST'])
 def sudoku():
     '''sudoku() function to handle GET and POST requests'''
-    
+
     #? handle POST request with input puzzle string
     if request.method == 'POST':
 
@@ -43,18 +43,18 @@ def sudoku():
         print("Converted input grid:\n", input_grid, "\n")
 
         #* Run Sudoku solver by calling 'run_puzzle' function from sudoku.py
-        assignments, order_of_assignment, domains = run_puzzle(input_grid)
+        assignments, order_of_assignment, domains, failed_values = run_puzzle(input_grid)
 
         #? Display order of assignment and domains in console for testing
         # print(order_of_assignment)
         # print(domains)
-        
+
         #? prepare solved puzzle as grid
         output_grid = [[assignments[f"C{i+1}{j+1}"][0] if isinstance(assignments[f"C{i+1}{j+1}"], list) else assignments[f"C{i+1}{j+1}"] for j in range(9)] for i in range(9)]
 
         #! Display Solved Puzzle as 2D grid in console
         print("Output grid:\n", output_grid, "\n")
-        
+
         #! Display Solved Puzzle as string in console
         output_string = grid_to_string(output_grid)
         print("Output string: ", output_string, "\n")
@@ -62,8 +62,17 @@ def sudoku():
         #! Convert input grid to string just as a backup
         input_string = grid_to_string(input_grid)
 
+        #? Prepare list of failed values in backtrack and create a 2D grid to track changes in the output
+        failed_grid = [[None for j in range(9)] for i in range(9)]
+        for pos, val in failed_values.items():
+            failed_grid[int(pos[1])-1][int(pos[2])-1] = str(val)
+
+        #! Failed values for testing in console
+        # print("Failed values:\n", failed_values, "\n")
+        # print("Failed grid:\n", failed_grid, "\n")
+
         #! Render index.html template with input and solved puzzles
-        return render_template('index.html', input_grid=input_grid, input_string=input_string, output_grid=output_grid, output_string=output_string, order_of_assignment=order_of_assignment, domains=domains)
+        return render_template('index.html', input_grid=input_grid, input_string=input_string, output_grid=output_grid, output_string=output_string, order_of_assignment=order_of_assignment, domains=domains, failed_values=failed_values, failed_grid=failed_grid)
 
     #? handle GET request
     return render_template('index.html')

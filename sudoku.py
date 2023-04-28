@@ -103,6 +103,8 @@ def backtrack(csp):
     assignments = {}
     order_of_assignment = []
     domains = []
+    failed_values = {} # added failed_values dictionary
+    backtrack_counts = {} # added backtrack_counts dictionary
 
     def backtrack_helper():
         if len(assignments) == len(csp['variables']):
@@ -122,6 +124,15 @@ def backtrack(csp):
                 if result:
                     return True
 
+            # update failed values and backtrack counts
+            if var not in failed_values:
+                failed_values[var] = []
+            if not inferences:
+                failed_values[var].append(value)
+                if var not in backtrack_counts:
+                    backtrack_counts[var] = 0
+                backtrack_counts[var] += 1
+
             del assignments[var]
             csp['variables'] = deepcopy(domains.pop())
             order_of_assignment.pop()
@@ -129,9 +140,9 @@ def backtrack(csp):
         return False
 
     if backtrack_helper():
-        return assignments, order_of_assignment, domains
+        return assignments, order_of_assignment, domains, failed_values
     else:
-        return None, None, None
+        return None, None, None, None
 
 
 
@@ -155,8 +166,8 @@ def run_puzzle(puzzle):
     # print(CSP['variables'])    
     
     #? Run backtracking search on CSP
-    assignments, order_of_assignment, domains = backtrack(CSP)
-    return(assignments, order_of_assignment, domains)
+    assignments, order_of_assignment, domains, failed_values = backtrack(CSP)
+    return(assignments, order_of_assignment, domains, failed_values)
 
 # ---------------- End of code ----------------
 
